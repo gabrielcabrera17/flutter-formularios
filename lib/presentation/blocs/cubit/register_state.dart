@@ -8,16 +8,16 @@ class RegisterFormState extends Equatable {
   final FormStatus formStatus;
   final bool isValid;
   final Username username;
-  final String email;
-  final String password;
+  final Email email;
+  final Password password;
 
   const RegisterFormState({
     //valores iniciales en el constructor
     this.formStatus = FormStatus.invalid, 
     this.isValid = true,
     this.username = const Username.pure(), 
-    this.email = '', 
-    this.password = '',
+    this.email = const Email.pure(), 
+    this.password = const Password.pure(),
     
   });
 
@@ -26,8 +26,8 @@ class RegisterFormState extends Equatable {
     FormStatus? formStatus,
     bool? isValid,
     Username? username,
-    String? email,
-    String? password
+    Email? email,
+    Password? password
   }) => RegisterFormState(
     // si no  viene formstatus sera igual a this.formStatus y así con todos los demas
     formStatus: formStatus ?? this.formStatus,
