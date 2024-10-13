@@ -51,44 +51,30 @@ class _RegisterView extends StatelessWidget {
   }
 }
 
-class _RegisterForm extends StatefulWidget {
+class _RegisterForm extends StatelessWidget {
   const _RegisterForm();
 
-  @override
-  State<_RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<_RegisterForm> {
-
-  
 //Este global key me permite enlazar el key con el _formkey
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-
   @override
   Widget build(BuildContext context) {
 
     //estare pendiente de ese cubit (referencia al cubit)
   final registerCubit = context.watch<RegisterCubit>();
+  //llamamos el objeto de tipo username del estado de nuestro cubit y lo almacenamos en la variable usernaem
+  final username = registerCubit.state.username;
 
     return  Form(
-      key: _formKey,
       child: Column(
         children: [
 
           CustomTextFormField(
             label: 'Nombre de Usuario',
-            onChanged:(value) {
-              registerCubit.usernameChanged(value);
-              //cada vez que la persona este escribiendo algo automaticamente voy a verificare si validad cada uno de los campos
-              _formKey.currentState?.validate();
-            },
-            validator: (value){
-              if(value == null || value.isEmpty) return 'Campo requerido';
-              if(value.trim().isEmpty) return 'Campo requerido';
-              if(value.length < 6) return 'Más de 6 letras';
-              return null;
-            },
+            //para determinar cuando esto cambia o no, lo regreso a leer el cubir usernameChanged
+            onChanged:registerCubit.usernameChanged,
+            //reemplazamos validator por errorMessage
+            errorMessage: username.isPure || username.isValid
+            ? null
+            : 'Usuario no valido',
           ),
           const SizedBox(height: 10,),
           CustomTextFormField(
@@ -96,7 +82,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
             onChanged:(value) {
               registerCubit.emailChanged(value);
               //cada vez que la persona este escribiendo algo automaticamente voy a verificare si validad cada uno de los campos
-              _formKey.currentState?.validate();
+           
             },
               validator: (value){
               if(value == null || value.isEmpty) return 'Campo requerido';
@@ -114,8 +100,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
             obscureText: true,
             onChanged: (value) {
               registerCubit.passwordChanged(value);
-              //cada vez que la persona este escribiendo algo automaticamente voy a verificare si validad cada uno de los campos
-              _formKey.currentState?.validate();
+              
             },
              validator: (value){
               if(value == null || value.isEmpty) return 'Campo requerido';
