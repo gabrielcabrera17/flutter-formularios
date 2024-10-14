@@ -14,11 +14,12 @@ class RegisterCubit extends Cubit<RegisterFormState> {
         formStatus: FormStatus.validating,
         username: Username.dirty(state.username.value),
         password: Password.dirty(state.password.value),
+        email: Email.dirty(state.email.value),
        
         isValid: Formz.validate([
           state.username,
-          state.password
-          //TODO state.email
+          state.password,
+          state.email
         ])
       )
     );
@@ -36,7 +37,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
         //al llamar validate pide el listado de campos y mandara a llamar la validación de cada uno de ellos
         //mando las otras intancias de mis inputs, porque la función de validación
         //necesita verificar cada uno de los campos para saber si es valido o no el formulario
-        isValid: Formz.validate([username, state.password])
+        isValid: Formz.validate([username, state.password, state.email])
       )
     );
   }
@@ -45,7 +46,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     emit(
       state.copyWith(
         email: email,
-        isValid: Formz.validate([email])
+        isValid: Formz.validate([email, state.password, state.username])
       )
     );
   }
@@ -55,7 +56,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
       state.copyWith(
         password: password,
         //hago referencia al state por que en este punto no tengo referencia a los demás campos
-        isValid: Formz.validate([password, state.username])
+        isValid: Formz.validate([password, state.username, state.email])
       )
     );
   }
