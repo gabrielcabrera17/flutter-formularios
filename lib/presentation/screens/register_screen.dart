@@ -62,6 +62,7 @@ class _RegisterForm extends StatelessWidget {
   final registerCubit = context.watch<RegisterCubit>();
   //llamamos el objeto de tipo username del estado de nuestro cubit y lo almacenamos en la variable usernaem
   final username = registerCubit.state.username;
+  final password = registerCubit.state.password;
 
     return  Form(
       child: Column(
@@ -72,9 +73,7 @@ class _RegisterForm extends StatelessWidget {
             //para determinar cuando esto cambia o no, lo regreso a leer el cubir usernameChanged
             onChanged:registerCubit.usernameChanged,
             //reemplazamos validator por errorMessage
-            errorMessage: username.isPure || username.isValid
-            ? null
-            : 'Usuario no valido',
+            errorMessage: username.errorMessage,
           ),
           const SizedBox(height: 10,),
           CustomTextFormField(
@@ -98,16 +97,8 @@ class _RegisterForm extends StatelessWidget {
             CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
-            onChanged: (value) {
-              registerCubit.passwordChanged(value);
-              
-            },
-             validator: (value){
-              if(value == null || value.isEmpty) return 'Campo requerido';
-              if(value.trim().isEmpty) return 'Campo requerido';
-              if(value.length < 6) return 'Más de 6 letras';
-              return null;
-            },
+            onChanged: registerCubit.passwordChanged,
+            errorMessage: password.errorMessage,
           ),
 
           const SizedBox(height: 20,),
