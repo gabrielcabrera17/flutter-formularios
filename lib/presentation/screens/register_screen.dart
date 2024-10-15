@@ -4,107 +4,81 @@ import 'package:forms_app/presentation/blocs/cubit/register_cubit.dart';
 import 'package:forms_app/presentation/widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen();
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Nuevo Usuario'),
       ),
       body: BlocProvider(
-        create: (context) => RegisterCubit(),
-        child:const _RegisterView() ,
-        ) 
+        create: (_) => RegisterCubit(),
+        child: const _RegisterView(),
+      ),
     );
   }
 }
-
 
 class _RegisterView extends StatelessWidget {
   const _RegisterView();
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FlutterLogo(size: 100,),
+    final registerCubit = context.watch<RegisterCubit>();
+    final username = registerCubit.state.username;
+    final password = registerCubit.state.password;
+    final email = registerCubit.state.email;
+    final isManagerApproved = registerCubit.state.isManagerApproved;
 
-              _RegisterForm(),
-
-              
-              SizedBox(height: 20,),
-
-             
-
-              SizedBox(height: 20,)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RegisterForm extends StatelessWidget {
-  const _RegisterForm();
-
-//Este global key me permite enlazar el key con el _formkey
-  @override
-  Widget build(BuildContext context) {
-
-    //estare pendiente de ese cubit (referencia al cubit)
-  final registerCubit = context.watch<RegisterCubit>();
-  //llamamos el objeto de tipo username del estado de nuestro cubit y lo almacenamos en la variable usernaem
-  final username = registerCubit.state.username;
-  final password = registerCubit.state.password;
-  final email = registerCubit.state.email;
-
-    return  Form(
+    return Form(
       child: Column(
         children: [
-
           CustomTextFormField(
             label: 'Nombre de Usuario',
-            //para determinar cuando esto cambia o no, lo regreso a leer el cubir usernameChanged
-            onChanged:registerCubit.usernameChanged,
-            //reemplazamos validator por errorMessage
+            onChanged: registerCubit.usernameChanged,
             errorMessage: username.errorMessage,
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 10),
           CustomTextFormField(
-            label: 'Correo Electronico',
+            label: 'Correo Electrónico',
             onChanged: registerCubit.emailChanged,
             errorMessage: email.errorMessage,
           ),
-          const SizedBox(height: 10,),
-            CustomTextFormField(
+          const SizedBox(height: 10),
+          CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
             onChanged: registerCubit.passwordChanged,
             errorMessage: password.errorMessage,
           ),
+          const SizedBox(height: 20),
 
-          const SizedBox(height: 20,),
-
-          FilledButton.tonalIcon(
+          // Botón para simular la aprobación del gerente
+          FilledButton(
             onPressed: () {
+              registerCubit.managerApproval(true);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Formulario aprobado por el gerente')),
+              );
+            },
+            child: const Text('Aprobar Formulario por Gerente'),
+          ),
 
-              //final isValid = _formKey.currentState!.validate();
-              //if( !isValid ) return;
-             
-             registerCubit.onSubmit();
-            }, 
-            icon: Icon(Icons.save) ,
-            label: Text('Crear Usuario'),
+          const SizedBox(height: 20),
+
+          // Botón de crear usuario
+          FilledButton.tonalIcon(
+            onPressed: isManagerApproved
+                ? () {
+                    registerCubit.onSubmit();
+                  }
+                : null, // Solo habilitado si el gerente ha aprobado
+            icon: const Icon(Icons.save),
+            label: const Text('Crear Usuario'),
           ),
         ],
-      )
-      );
+      ),
+    );
   }
 }
