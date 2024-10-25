@@ -1,3 +1,4 @@
+
 import 'package:go_router/go_router.dart';
 
 import 'package:forms_app/presentation/screens/screens.dart';
@@ -21,7 +22,11 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/new-user',
-      builder: (context, state) => const RegisterScreen(),
+      builder: (context, state) =>  RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/form-multiples',
+      builder: (context, state) => const FormContainer(),
     ),
 
   ]

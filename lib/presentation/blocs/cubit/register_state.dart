@@ -1,42 +1,34 @@
-part of 'register_cubit.dart';
-
-// estados del formulario
-enum FormStatus { invalid, valid, validating, posting }
+import 'package:equatable/equatable.dart';
+import 'package:forms_app/infrastructure/inputs/inputs.dart';
+import 'package:formz/formz.dart';
 
 class RegisterFormState extends Equatable {
-  final FormStatus formStatus;
-  final bool isValid;
   final Username username;
   final Email email;
   final Password password;
-  final bool isManagerApproved; // Aprobación del gerente
+  final bool userCreated;
 
   const RegisterFormState({
-    this.formStatus = FormStatus.invalid,
-    this.isValid = true,
     this.username = const Username.pure(),
     this.email = const Email.pure(),
     this.password = const Password.pure(),
-    this.isManagerApproved = true, // Inicializado en falso
+    this.userCreated = false,
   });
 
   RegisterFormState copyWith({
-    FormStatus? formStatus,
-    bool? isValid,
     Username? username,
     Email? email,
     Password? password,
-    bool? isManagerApproved, // Aprobación del gerente
-  }) =>
-      RegisterFormState(
-        formStatus: formStatus ?? this.formStatus,
-        isValid: isValid ?? this.isValid,
-        username: username ?? this.username,
-        email: email ?? this.email,
-        password: password ?? this.password,
-        isManagerApproved: isManagerApproved ?? this.isManagerApproved,
-      );
+    bool? userCreated,
+  }) {
+    return RegisterFormState(
+      username: username ?? this.username,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      userCreated: userCreated ?? this.userCreated,
+    );
+  }
 
   @override
-  List<Object> get props => [formStatus, isValid, username, email, password, isManagerApproved];
+  List<Object?> get props => [username, email, password, userCreated];
 }

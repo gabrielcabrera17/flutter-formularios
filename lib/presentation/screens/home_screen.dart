@@ -37,6 +37,13 @@ class HomeScreen extends StatelessWidget {
             onTap: () => context.push('/new-user'),
           ),
 
+            ListTile(
+            title: const Text('Formulario Multiple'),
+            subtitle: const Text('Manejo de Formulario'),
+            trailing: const Icon( Icons.format_size_outlined ),
+            onTap: () => context.push('/form-multiples'),
+          ),
+
         
         ],
 
